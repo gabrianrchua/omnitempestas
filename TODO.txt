@@ -1,0 +1,6 @@
+todo
+
+- show source icons
+- make prettier
+- light / dark theme and option to change based on time of day
+- end: dockerize and build / run on server
