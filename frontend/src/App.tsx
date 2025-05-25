@@ -19,24 +19,24 @@ import {
   Toolbar,
   Typography,
   type SelectChangeEvent,
-} from '@mui/material';
-import './App.css';
-import { WeatherDisplay } from './components/WeatherDisplay';
-import type { WeatherEntry, WeatherReport } from './types/interfaces';
+} from "@mui/material";
+import "./App.css";
+import { WeatherDisplay } from "./components/WeatherDisplay";
+import type { WeatherEntry, WeatherReport } from "./types/interfaces";
 import {
   WeatherSource,
   type WeatherSourceType,
   type SkyStatusType,
   WeatherSourceFriendlyString,
-} from './types/enums';
-import { WeatherCarousel } from './components/WeatherCarousel';
+} from "./types/enums";
+import { WeatherCarousel } from "./components/WeatherCarousel";
 // import { NetworkService } from './util/NetworkService';
-import { useEffect, useState } from 'react';
-import { PageSkeleton } from './components/PageSkeleton';
-import { Error, Refresh } from '@mui/icons-material';
-import { TimeDisplay } from './components/TimeDisplay';
-import { NetworkService } from './util/NetworkService';
-import OmnitempestasIcon from './assets/omnitempestas.svg?react';
+import { useEffect, useState } from "react";
+import { PageSkeleton } from "./components/PageSkeleton";
+import { Error, Refresh } from "@mui/icons-material";
+import { TimeDisplay } from "./components/TimeDisplay";
+import { NetworkService } from "./util/NetworkService";
+import OmnitempestasIcon from "./assets/omnitempestas.svg?react";
 
 const App = () => {
   const [rawReport, setRawReport] = useState<WeatherReport | undefined>(
@@ -46,7 +46,7 @@ const App = () => {
     WeatherReport | undefined
   >(undefined);
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState<boolean>(false);
-  const [errorText, setErrorText] = useState<string>('');
+  const [errorText, setErrorText] = useState<string>("");
   const availableSources: WeatherSourceType[] = Object.values(WeatherSource);
   const [selectedSources, setSelectedSources] =
     useState<WeatherSourceType[]>(availableSources);
@@ -75,21 +75,21 @@ const App = () => {
       setIsErrorDialogOpen(true);
       if (
         error &&
-        typeof error === 'object' &&
-        'code' in error &&
-        typeof error.code === 'string' &&
-        'message' in error &&
-        typeof error.message === 'string'
+        typeof error === "object" &&
+        "code" in error &&
+        typeof error.code === "string" &&
+        "message" in error &&
+        typeof error.message === "string"
       ) {
         setErrorText(
           `There was a problem fetching the weather data: "${error.code}: ${error.message}". Please try again in a few minutes.`
         );
       } else {
         setErrorText(
-          'There was an unknown problem fetching the weather data, see the console for more details. Please try again in a few minutes.'
+          "There was an unknown problem fetching the weather data, see the console for more details. Please try again in a few minutes."
         );
       }
-      console.error('Failed to fetch weather data:', error);
+      console.error("Failed to fetch weather data:", error);
     }
   };
 
@@ -175,15 +175,15 @@ const App = () => {
       <Dialog open={isErrorDialogOpen}>
         <DialogTitle>Failed to fetch weather data</DialogTitle>
         <DialogContent
-          sx={{ display: 'flex', flexDirection: 'row', gap: '12px' }}
+          sx={{ display: "flex", flexDirection: "row", gap: "12px" }}
         >
-          <Error color='error' />
-          <Typography variant='body1'>{errorText}</Typography>
+          <Error color="error" />
+          <Typography variant="body1">{errorText}</Typography>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              setErrorText('');
+              setErrorText("");
               setIsErrorDialogOpen(false);
               fetchWeatherData();
             }}
@@ -195,16 +195,16 @@ const App = () => {
       </Dialog>
       {filteredReport ? (
         <>
-          <AppBar position='static'>
+          <AppBar position="static">
             <Toolbar>
               <SvgIcon component={OmnitempestasIcon} inheritViewBox />
-              <Typography variant='h6'>omnitempestas</Typography>
+              <Typography variant="h6">omnitempestas</Typography>
               <Box>
-                <FormControl sx={{ minWidth: '200px', maxWidth: '500px' }}>
+                <FormControl sx={{ minWidth: "200px", maxWidth: "500px" }}>
                   <InputLabel>Weather Sources</InputLabel>
                   <Select
                     multiple
-                    input={<OutlinedInput label='Weather Sources' />}
+                    input={<OutlinedInput label="Weather Sources" />}
                     value={selectedSources.map((source) => String(source))}
                     onChange={(event: SelectChangeEvent<string[]>) => {
                       const {
@@ -212,9 +212,9 @@ const App = () => {
                       } = event;
                       setSelectedSources(
                         // On autofill we get a stringified value.
-                        typeof value === 'string'
+                        typeof value === "string"
                           ? value
-                              .split(',')
+                              .split(",")
                               .map(
                                 (item) => parseInt(item) as WeatherSourceType
                               )
@@ -224,7 +224,7 @@ const App = () => {
                       );
                     }}
                     renderValue={(selected: string[]) => (
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                         {selected.map((value: string) => (
                           <Chip
                             key={value}
@@ -251,13 +251,13 @@ const App = () => {
               </Box>
               <Box
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Typography variant='body1'>Last updated&nbsp;</Typography>
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <Typography variant="body1">Last updated&nbsp;</Typography>
                   <TimeDisplay
                     hours={filteredReport.timestamp.getHours()}
                     minutes={filteredReport.timestamp.getMinutes()}
@@ -269,15 +269,23 @@ const App = () => {
               </Box>
             </Toolbar>
           </AppBar>
-          <Box sx={{ margin: '8px' }}>
+          <Box sx={{ margin: "8px" }}>
             {filteredReport.entries.length ? (
               <>
-                <WeatherDisplay entry={filteredReport.entries[0]} />
+                <WeatherDisplay
+                  entry={filteredReport.entries[0]}
+                  highTemperature={Math.max(
+                    ...filteredReport.entries.map((entry) => entry.temperature)
+                  )}
+                  lowTemperature={Math.min(
+                    ...filteredReport.entries.map((entry) => entry.temperature)
+                  )}
+                />
                 <WeatherCarousel entries={filteredReport.entries} />
               </>
             ) : (
               <Box
-                sx={{ width: '100%', textAlign: 'center', marginTop: '20vh' }}
+                sx={{ width: "100%", textAlign: "center", marginTop: "20vh" }}
               >
                 <Typography>No weather entries to show</Typography>
               </Box>

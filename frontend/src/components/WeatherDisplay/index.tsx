@@ -7,6 +7,8 @@ import { RainDisplay } from '../RainDisplay';
 export const WeatherDisplay = (props: {
   entry: WeatherEntry;
   size?: 'sm' | 'md' | 'lg';
+  highTemperature?: number;
+  lowTemperature?: number;
 }) => {
   // default: lg
   let temperatureVariant: 'h1' | 'body1' | 'h4' = 'h1';
@@ -34,6 +36,12 @@ export const WeatherDisplay = (props: {
       <Typography variant={temperatureVariant}>
         {props.entry.temperature}&deg;
       </Typography>
+      {props.highTemperature && props.lowTemperature && (
+        <Typography>
+          High {props.highTemperature}&deg; &bull; Low {props.lowTemperature}
+          &deg;
+        </Typography>
+      )}
       <SkyStatusDisplay
         timeHours={props.entry.timeHours}
         skyStatus={props.entry.skyStatus}
