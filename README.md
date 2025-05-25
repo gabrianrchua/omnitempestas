@@ -1,0 +1,32 @@
+# omnitempestas
+
+WIP: Multi source hourly weather aggregator using Playwright, TypeScript, and React.
+
+## Dev Setup
+
+1. Clone this repository
+
+2. Install node modules
+
+```
+cd frontend
+npm install
+cd ../backend
+npm install
+```
+
+3. Install Playwright Chromium browser
+
+`npx playwright install chromium`
+
+4. Set up environment variables
+
+GUIDE WIP: See `/backend/src/util/env.ts` for details.
+
+5. Run backend
+
+`npm run dev`
+
+6. Run frontend
+
+`npm run dev`
