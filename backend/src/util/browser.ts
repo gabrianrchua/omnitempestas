@@ -125,10 +125,10 @@ export const fetchTWCData = async (): Promise<WeatherEntry[]> => {
     throw new Error('Browser was launched but page was still undefined');
   }
 
-  // helper function to convert TWC format from HH:MM pm --> hours, minutes
+  // helper function to convert TWC format from HH pm --> hours, minutes
   const convertTo24HourFormat = (time: string): [number, number] => {
-    // Regular expression to match the time format "12:00 pm"
-    const timeRegex = /^(\d{1,2}):(\d{2})\s?(am|pm)$/i;
+    // Regular expression to match the time format "12 PM"
+    const timeRegex = /^(\d{1,2})\s?(AM|PM)$/i;
     const match = time.match(timeRegex);
 
     if (!match) {
@@ -137,8 +137,7 @@ export const fetchTWCData = async (): Promise<WeatherEntry[]> => {
 
     // Extract hours, minutes, and period from the matched groups
     let hours = parseInt(match[1], 10);
-    const minutes = parseInt(match[2], 10);
-    const period = match[3].toLowerCase();
+    const period = match[2].toLowerCase();
 
     // Convert to 24-hour format
     if (period === 'pm' && hours !== 12) {
@@ -147,7 +146,7 @@ export const fetchTWCData = async (): Promise<WeatherEntry[]> => {
       hours = 0;
     }
 
-    return [hours, minutes];
+    return [hours, 0];
   };
 
   // helper function to convert TWC written sky status to SkyStatus type
@@ -179,17 +178,16 @@ export const fetchTWCData = async (): Promise<WeatherEntry[]> => {
 
       await page.goto(twcUrl);
 
-      await page.waitForSelector('[data-testid=ExpandedDetailsCardUpSell]');
+      await page.waitForSelector('[data-testid=ExpandedDetailsCard-0]');
 
       Log.verbose('TWC page loaded');
 
-      const cards: Locator[] = await page
-        .getByTestId('ExpandedDetailsCardUpSell')
-        .all();
+      const cards: Locator[] = [...Array(maxWeatherEntries).keys()].map((x) => page
+        .getByTestId(`ExpandedDetailsCard-${x}`));
       const entries: WeatherEntry[] = [];
 
       for (const card of cards) {
-        // do not continue past configured max weather entries
+        // failsafe: do not continue past configured max weather entries
         if (entries.length >= maxWeatherEntries) {
           break;
         }

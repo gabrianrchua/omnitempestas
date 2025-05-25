@@ -1,6 +1,9 @@
 todo
 
+- auto refresh every hour + 5 mins
 - show source icons
-- make prettier
+- add more sources
+- make less ugly
+- add daily forecast
 - light / dark theme and option to change based on time of day
 - end: dockerize and build / run on server
