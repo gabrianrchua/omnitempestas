@@ -342,10 +342,17 @@ export const fetchAccuData = async (): Promise<WeatherEntry[]> => {
       .locator('div.accordion-item.hour')
       .all();
 
+    let isFirstCard: boolean = true;
     for (const card of cards) {
       // get header and click to expand
       const header = card.locator('div.hourly-detailed-card-header');
-      await header.click();
+      
+      // first card does not need to be clicked to expand
+      if (!isFirstCard) {
+        await header.click();
+      } else {
+        isFirstCard = false;
+      }
 
       const details = card.locator('div.hourly-detailed-card-content');
 
@@ -355,13 +362,17 @@ export const fetchAccuData = async (): Promise<WeatherEntry[]> => {
         continue;
       }
       const rainPercent = parseFloat(rawRainPercent.replaceAll('%', ''));
-      const rainAmount =
-        rainPercent >= 50
-          ? await details
-              .locator('div.hourly-content-container > div > p')
-              .getByText('Rain')
-              .textContent()
-          : '0 in';
+      let rainAmount: string = '0 in';
+      if (rainPercent >= 50) {
+        try {
+          rainAmount = await details
+                .locator('div.hourly-content-container > div > p')
+                .getByText('Rain')
+                .textContent() ?? '0 in';
+        } catch (_) {
+          // continue anyway; rain amount not displayed despite being >= 50%
+        }
+      }
       const temperature = await header.locator('div.temp').textContent();
       const rawSkyStatus = await header.locator('div.phrase').textContent();
 

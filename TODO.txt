@@ -1,6 +1,8 @@
 todo
 
-- auto refresh every hour + 5 mins
+- add failsafes for scheduler
+- frontend auto refresh every hour + 5 mins
+- more granularity in sky status
 - show source icons
 - add more sources
 - make less ugly
