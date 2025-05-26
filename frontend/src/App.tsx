@@ -30,8 +30,7 @@ import {
   WeatherSourceFriendlyString,
 } from './types/enums';
 import { WeatherCarousel } from './components/WeatherCarousel';
-// import { NetworkService } from './util/NetworkService';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PageSkeleton } from './components/PageSkeleton';
 import { Error, Refresh } from '@mui/icons-material';
 import { TimeDisplay } from './components/TimeDisplay';
@@ -50,6 +49,7 @@ const App = () => {
   const availableSources: WeatherSourceType[] = Object.values(WeatherSource);
   const [selectedSources, setSelectedSources] =
     useState<WeatherSourceType[]>(availableSources);
+  const timeoutRef = useRef<number>(null);
 
   useEffect(() => {
     fetchWeatherData();
@@ -67,10 +67,17 @@ const App = () => {
     setFilteredReport(undefined);
     try {
       const report: WeatherReport = await NetworkService.getWeather();
+      // if timestamp is the same, the report hasn't finished updating; wait
+      // another 5 minutes
+      if (report.timestamp === rawReport?.timestamp) {
+        scheduleNextFetch(new Date(new Date().getTime() - 60 * 60 * 1000));
+        return;
+      }
       setRawReport(report);
       const filtered = { ...report };
       filtered.entries = aggregateWeatherData(report.entries);
       setFilteredReport(filtered);
+      scheduleNextFetch(report.timestamp);
     } catch (error) {
       setIsErrorDialogOpen(true);
       if (
@@ -168,6 +175,26 @@ const App = () => {
     }
 
     return finalEntries;
+  };
+
+  const scheduleNextFetch = (timestamp: Date) => {
+    // clear any old timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // 65 minutes past last fetch
+    const nextFetchTime = new Date(timestamp.getTime() + 65 * 60 * 1000);
+    const delay = nextFetchTime.getTime() - new Date().getTime();
+
+    if (delay > 0) {
+      timeoutRef.current = setTimeout(() => {
+        fetchWeatherData();
+      }, delay);
+    } else {
+      // if the delay is negative or zero, fetch immediately
+      fetchWeatherData();
+    }
   };
 
   return (
