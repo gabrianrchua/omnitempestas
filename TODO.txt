@@ -8,4 +8,4 @@ todo
 - add daily forecast
 - save filter in localStorage?
 - light / dark theme and option to change based on time of day
-- end: dockerize and build / run on server
+- docker: fix for HTTP2_PROTOCOL_ERROR
