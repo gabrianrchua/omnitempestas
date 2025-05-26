@@ -13,18 +13,31 @@ export const PageSkeleton = () => {
     >
       <Box
         sx={{
-          position: 'fixed',
-          top: '12px',
-          right: '12px',
           display: 'flex',
           flexDirection: 'row',
           gap: '12px',
+          width: '100%',
+          alignItems: 'center',
+          padding: '12px',
         }}
       >
-        <Skeleton variant='text' width={200} />
-        <Skeleton variant='circular' width={24} height={24} />
+        <Skeleton
+          variant='circular'
+          width={24}
+          height={24}
+          sx={{ marginLeft: '12px' }}
+        />
+        <Skeleton variant='text' width={150} />
+        <Box sx={{ flexGrow: 1 }} />
+        <Skeleton variant='rounded' width={400} />
+        <Skeleton variant='text' width={100} />
+        <Skeleton
+          variant='circular'
+          width={24}
+          height={24}
+          sx={{ marginRight: '12px' }}
+        />
       </Box>
-      <Skeleton variant='text' width={150} />
       <Skeleton variant='rounded' width={200} height={230} />
       <Box
         sx={{

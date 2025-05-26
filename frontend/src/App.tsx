@@ -196,11 +196,13 @@ const App = () => {
       {filteredReport ? (
         <>
           <AppBar position='static'>
-            <Toolbar>
+            <Toolbar sx={{ gap: '12px' }}>
               <SvgIcon component={OmnitempestasIcon} inheritViewBox />
-              <Typography variant='h6'>omnitempestas</Typography>
+              <Typography variant='h6' sx={{ flexGrow: 1 }}>
+                omnitempestas
+              </Typography>
               <Box>
-                <FormControl sx={{ minWidth: '200px', maxWidth: '500px' }}>
+                <FormControl variant='outlined' sx={{ minWidth: '200px' }}>
                   <InputLabel>Weather Sources</InputLabel>
                   <Select
                     multiple
@@ -237,6 +239,7 @@ const App = () => {
                         ))}
                       </Box>
                     )}
+                    size='small'
                   >
                     {availableSources.map((source: WeatherSourceType) => (
                       <MenuItem key={source} value={String(source)}>

@@ -7,5 +7,6 @@ todo
 - add more sources
 - make less ugly
 - add daily forecast
+- save filter in localStorage?
 - light / dark theme and option to change based on time of day
 - end: dockerize and build / run on server
