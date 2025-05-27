@@ -2,7 +2,8 @@ todo
 
 - add failsafes for scheduler
 - more granularity in sky status
-- show source icons
+- show source icons in each card and on dropdown
+- add confidence interval?
 - add more sources
 - make less ugly
 - add daily forecast
