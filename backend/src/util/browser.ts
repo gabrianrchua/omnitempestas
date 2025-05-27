@@ -182,8 +182,9 @@ export const fetchTWCData = async (): Promise<WeatherEntry[]> => {
 
       Log.verbose('TWC page loaded');
 
-      const cards: Locator[] = [...Array(maxWeatherEntries).keys()].map((x) => page
-        .getByTestId(`ExpandedDetailsCard-${x}`));
+      const cards: Locator[] = [...Array(maxWeatherEntries).keys()].map((x) =>
+        page.getByTestId(`ExpandedDetailsCard-${x}`)
+      );
       const entries: WeatherEntry[] = [];
 
       for (const card of cards) {
@@ -346,7 +347,7 @@ export const fetchAccuData = async (): Promise<WeatherEntry[]> => {
     for (const card of cards) {
       // get header and click to expand
       const header = card.locator('div.hourly-detailed-card-header');
-      
+
       // first card does not need to be clicked to expand
       if (!isFirstCard) {
         await header.click();
@@ -365,10 +366,11 @@ export const fetchAccuData = async (): Promise<WeatherEntry[]> => {
       let rainAmount: string = '0 in';
       if (rainPercent >= 50) {
         try {
-          rainAmount = await details
-                .locator('div.hourly-content-container > div > p')
-                .getByText('Rain')
-                .textContent() ?? '0 in';
+          rainAmount =
+            (await details
+              .locator('div.hourly-content-container > div > p')
+              .getByText('Rain')
+              .textContent()) ?? '0 in';
         } catch (_) {
           // continue anyway; rain amount not displayed despite being >= 50%
         }

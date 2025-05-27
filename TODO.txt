@@ -1,5 +1,7 @@
 todo
 
+- FIX: TWC windows is ExpandedDetailsCardUpSell while linux is ExpandedDetailsCard-n
+  - specify user agent?
 - add failsafes for scheduler
 - more granularity in sky status
 - show source icons in each card and on dropdown
