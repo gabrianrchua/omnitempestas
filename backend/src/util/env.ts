@@ -17,7 +17,9 @@ export const port: number = parseInt(process.env.PORT || '3000');
 export const env: 'prod' | 'dev' = process.env.ENV === 'prod' ? 'prod' : 'dev';
 
 /**
- * Port of the development frontend server. Only used when `env` is `dev`.
+ * Port of the development frontend server. Only used when `env` is `dev`. Not
+ * required if you navigate directly to the frontend in the browser; only needed
+ * if you wish to use the proxy built into the dev server.
  *
  * Default: `5173`
  */
@@ -27,7 +29,7 @@ export const frontendPort: number = parseInt(
 
 /**
  * The max number of weather entries into the future to gather. Approximately
- * equals how many hours in the future to get. Too high and Playwright calls
+ * equals how many hours in the future to get. Too high and Playwright routines
  * may fail.
  *
  * Default: `24`
